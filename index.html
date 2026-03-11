@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>さんすうアプリ — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:   #FF6B2B;
+      --orange-l: #FF9A5C;
+      --orange-xl:#FFF0E8;
+      --yellow:   #FFD93D;
+      --green:    #06C270;
+      --blue:     #0085FF;
+      --red:      #FF4757;
+      --bg:       #FAFAF7;
+      --bg2:      #FFFFFF;
+      --ink:      #1A1208;
+      --ink2:     #4A3C2E;
+      --muted:    #9A8E82;
+      --border:   #EDE8E0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,107,43,.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(250,250,247,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 1.1rem; color: var(--ink);
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 60px;
+      padding: 120px 6vw 80px;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; right: -8vw; top: 50%;
+      transform: translateY(-50%);
+      width: min(55vw,640px); height: min(55vw,640px);
+      background: radial-gradient(circle, #FFE8D6 0%, rgba(255,232,214,0) 70%);
+      border-radius: 50%;
+      pointer-events: none; z-index: -1;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp .5s .1s forwards;
+    }
+    .hero-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(3rem, 6.5vw, 6.5rem);
+      font-weight: 900; line-height: 1.05; letter-spacing: -.02em;
+      opacity: 0; animation: fadeUp .6s .2s forwards;
+    }
+    .hero-title .accent  { color: var(--orange); }
+    .hero-title .outline { -webkit-text-stroke: 3px var(--orange); color: transparent; }
+    .hero-desc {
+      margin-top: 28px; font-size: 1rem; line-height: 1.9;
+      color: var(--ink2); max-width: 480px;
+      opacity: 0; animation: fadeUp .6s .35s forwards;
+    }
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px;
+      opacity: 0; animation: fadeUp .6s .48s forwards;
+    }
+    .tag {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      padding: 5px 13px; border-radius: 999px;
+      border: 1.5px solid var(--border); background: white; color: var(--muted);
+      transition: all .2s;
+    }
+    .tag:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+    /* PHONE MOCKUPS */
+    .hero-phones {
+      display: flex; gap: 16px; align-items: flex-start; padding-top: 20px;
+      opacity: 0; animation: fadeUp .7s .4s forwards;
+      position: relative; z-index: 1;
+    }
+    .phone {
+      width: 158px; background: #1A1208;
+      border-radius: 28px; padding: 10px;
+      box-shadow: 0 32px 64px rgba(26,18,8,.2), 0 0 0 1px rgba(255,255,255,.06) inset;
+    }
+    .phone-notch {
+      width: 50px; height: 14px; background: #1A1208;
+      border-radius: 0 0 8px 8px; margin: 0 auto 6px;
+    }
+    .phone-screen { background: #FFF8F0; border-radius: 20px; overflow: hidden; }
+    .p-bar {
+      background: #FFCC80; padding: 9px 8px 7px;
+      font-size: .5rem; font-weight: 700; text-align: center; color: #1A1208;
+    }
+    .p-cards { padding: 6px; display: flex; flex-direction: column; gap: 5px; }
+    .p-card {
+      border-radius: 7px; padding: 7px 8px;
+      font-size: .48rem; font-weight: 700; text-align: center; color: #1A1208;
+      animation: cardPulse 3.5s ease-in-out infinite;
+    }
+    @keyframes cardPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+    .phone-2 { transform: translateY(32px); }
+    .phone-2 .phone-screen { background: #F0F4F8; }
+    .pp-bar {
+      background: #90A4AE; padding: 9px 8px 7px;
+      font-size: .5rem; font-weight: 700; text-align: center; color: white;
+    }
+    .pp-body { padding: 6px; display: flex; flex-direction: column; gap: 5px; }
+    .pp-row {
+      background: white; border-radius: 6px;
+      padding: 6px 7px; font-size: .46rem; color: #37474F;
+    }
+    .pp-bar-chart { height: 5px; border-radius: 3px; margin-top: 3px; }
+
+    /* SECTION BASE */
+    section { position: relative; z-index: 1; padding: 96px 6vw; }
+    .s-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 14px;
+    }
+    .s-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900; letter-spacing: -.02em; line-height: 1.1; margin-bottom: 52px;
+    }
+    .divider { border: none; border-top: 1.5px solid var(--border); margin: 0 6vw; position: relative; z-index: 1; }
+
+    /* STATS */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 64px;
+    }
+    .stat-card {
+      background: white; border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 28px 24px; text-align: center;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+      transform: scaleX(0); transform-origin: left; transition: transform .35s;
+    }
+    .stat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(255,107,43,.14); border-color: var(--orange-l); }
+    .stat-card:hover::before { transform: scaleX(1); }
+    .stat-num { font-family: 'Nunito', sans-serif; font-size: 3rem; font-weight: 900; color: var(--orange); line-height: 1; }
+    .stat-unit { font-size: 1.3rem; }
+    .stat-label { font-size: .82rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+    /* OVERVIEW */
+    .overview-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    .ov-card {
+      background: white; border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 32px 28px; position: relative; overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .ov-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(255,107,43,.12); }
+    .ov-num {
+      position: absolute; top: 14px; right: 18px;
+      font-family: 'Nunito', sans-serif; font-size: 3.5rem; font-weight: 900;
+      color: rgba(255,107,43,.07); line-height: 1;
+    }
+    .ov-icon { font-size: 2rem; margin-bottom: 14px; }
+    .ov-card h3 { font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; margin-bottom: 10px; }
+    .ov-card p  { font-size: .87rem; line-height: 1.85; color: var(--ink2); }
+
+    /* MOCKUP 2-COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .mockup-phones { display: flex; gap: 20px; justify-content: center; align-items: flex-start; }
+    .text-side h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; letter-spacing: -.02em; margin-bottom: 24px;
+    }
+    .bullet { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+    .bullet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 7px; }
+    .bullet p { font-size: .88rem; line-height: 1.75; color: var(--ink2); }
+
+    /* TIMELINE */
+    .timeline { max-width: 720px; position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, var(--orange), var(--yellow), transparent);
+    }
+    .tl-item { display: grid; grid-template-columns: 44px 1fr; gap: 20px; margin-bottom: 36px; }
+    .tl-dot {
+      width: 44px; height: 44px; background: var(--bg);
+      border: 2.5px solid var(--orange); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      box-shadow: 0 4px 14px rgba(255,107,43,.18); flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .tl-content {
+      background: white; border: 1.5px solid var(--border); border-radius: 16px;
+      padding: 22px 24px; transition: border-color .2s, box-shadow .2s;
+    }
+    .tl-content:hover { border-color: var(--orange-l); box-shadow: 0 8px 24px rgba(255,107,43,.1); }
+    .tl-phase { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+    .tl-content h3 { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .tl-content p  { font-size: .86rem; line-height: 1.85; color: var(--ink2); }
+
+    /* CODE REVIEW */
+    .review-bg {
+      background: var(--ink); border-radius: 28px; padding: 56px 48px; margin: 0 -2vw;
+    }
+    .review-bg .s-label { color: var(--orange-l); }
+    .review-bg .s-title { color: white; }
+    .fixes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .fix-card {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px; padding: 24px 20px; transition: background .2s;
+    }
+    .fix-card:hover { background: rgba(255,107,43,.12); }
+    .fix-badge {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; letter-spacing: .1em; padding: 3px 10px;
+      border-radius: 999px; margin-bottom: 12px; font-weight: 600;
+    }
+    .badge-bug { background: rgba(255,71,87,.2);  color: #FF8A95; }
+    .badge-ref { background: rgba(0,133,255,.2);  color: #7EC2FF; }
+    .badge-ux  { background: rgba(6,194,112,.2);  color: #5DFFB5; }
+    .fix-card h4 { font-size: .9rem; font-weight: 600; color: white; margin-bottom: 8px; }
+    .fix-card p  { font-size: .8rem; line-height: 1.75; color: rgba(255,255,255,.5); }
+    .code {
+      margin-top: 12px; background: rgba(0,0,0,.35);
+      border-radius: 8px; padding: 12px 14px;
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem; line-height: 1.7;
+      overflow-x: auto; color: #9DC6FF;
+    }
+    .code .g { color: #5DFFB5; }
+    .code .o { color: #FFB347; }
+    .code .m { color: rgba(255,255,255,.28); }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .feat-card {
+      background: white; border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 28px 24px; position: relative; overflow: hidden;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .feat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(255,107,43,.12); border-color: var(--orange-l); }
+    .feat-num {
+      position: absolute; top: 16px; right: 18px;
+      font-family: 'Nunito', sans-serif; font-size: 3rem; font-weight: 900;
+      color: rgba(255,107,43,.07); line-height: 1;
+    }
+    .feat-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .feat-card h3 { font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 800; margin-bottom: 8px; }
+    .feat-card p  { font-size: .83rem; line-height: 1.8; color: var(--ink2); }
+
+    /* STACK */
+    .stack-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+    .stack-card {
+      background: white; border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 24px 20px; text-align: center;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .stack-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(255,107,43,.12); border-color: var(--orange-l); }
+    .stack-icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .stack-card h3 { font-family: 'Nunito', sans-serif; font-size: .9rem; font-weight: 800; margin-bottom: 4px; }
+    .stack-card p  { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1; border-top: 1.5px solid var(--border);
+      padding: 56px 6vw; background: white;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.2rem; color: var(--ink); }
+    .footer-logo span { color: var(--orange); }
+    footer p { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+    .github-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--ink); color: white; text-decoration: none;
+      padding: 13px 26px; border-radius: 999px;
+      font-family: 'Nunito', sans-serif; font-size: .9rem; font-weight: 700;
+      transition: background .2s, transform .2s;
+    }
+    .github-btn:hover { background: var(--orange); transform: translateY(-2px); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .fixes-grid    { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .two-col       { grid-template-columns: 1fr; }
+      .stats-row     { grid-template-columns: repeat(2,1fr); }
+      .stack-grid    { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 700px) {
+      .hero          { grid-template-columns: 1fr; }
+      .hero-phones   { display: none; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .fixes-grid    { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .review-bg     { padding: 36px 24px; margin: 0; }
+      .nav-links     { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">さんすう<span>APP</span></div>
+  <div class="nav-links">
+    <a href="#overview">概要</a>
+    <a href="#process">開発</a>
+    <a href="#review">レビュー</a>
+    <a href="#features">機能</a>
+    <a href="#stack">技術</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="hero-eyebrow">Flutter Portfolio Project · 2025</p>
+    <h1 class="hero-title">
+      子ども向け<br>
+      <span class="accent">さんすう</span><br>
+      <span class="outline">アプリ</span>
+    </h1>
+    <p class="hero-desc">
+      Flutter × Dart で作った算数練習アプリ。<br>
+      設計・実装・コードレビュー・UX改善まで<br>
+      ゼロから一人で手がけたプロジェクト。
+    </p>
+    <div class="hero-tags">
+      <span class="tag">Flutter / Dart</span>
+      <span class="tag">Python</span>
+      <span class="tag">SharedPreferences</span>
+      <span class="tag">Material Design 3</span>
+      <span class="tag">UX Design</span>
+    </div>
+  </div>
+
+  <div class="hero-phones">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="p-bar">📐 さんすうアプリ ⚙️</div>
+        <div class="p-cards">
+          <div class="p-card" style="background:#DBEAFE">➕ たしざん</div>
+          <div class="p-card" style="background:#D1FAE5;animation-delay:.25s">➖ ひきざん</div>
+          <div class="p-card" style="background:#EDE9FE;animation-delay:.5s">✖ かけざん</div>
+          <div class="p-card" style="background:#CCFBF1;animation-delay:.75s">➗ わりざん</div>
+          <div class="p-card" style="background:#FED7AA;animation-delay:1s">📖 ぶんしょう</div>
+          <div class="p-card" style="background:#FEF08A;animation-delay:1.25s">🧩 パズル</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone phone-2">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="pp-bar">👨‍👩‍👧 ほごしゃ</div>
+        <div class="pp-body">
+          <div class="pp-row">➕ たしざん<div class="pp-bar-chart" style="background:#4ADE80;width:85%"></div></div>
+          <div class="pp-row">✖ かけざん<div class="pp-bar-chart" style="background:#FB923C;width:54%"></div></div>
+          <div class="pp-row">➗ わりざん<div class="pp-bar-chart" style="background:#F87171;width:31%"></div></div>
+          <div class="pp-row" style="background:#FEF2F2;color:#B91C1C;font-size:.43rem">📋 まちがい 8もん 🔴×3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <p class="s-label reveal">Overview</p>
+  <h2 class="s-title reveal">プロジェクト概要</h2>
+
+  <div class="stats-row reveal">
+    <div class="stat-card">
+      <div class="stat-num">7<span class="stat-unit">+</span></div>
+      <div class="stat-label">レビューで発見・修正したバグ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">6</div>
+      <div class="stat-label">開発フェーズ（設計→完成）</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1200<span class="stat-unit">+</span></div>
+      <div class="stat-label">総コード行数（Dart）</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2</div>
+      <div class="stat-label">ユーザー層<br>（子ども・保護者）</div>
+    </div>
+  </div>
+
+  <div class="overview-grid reveal">
+    <div class="ov-card">
+      <span class="ov-num">01</span>
+      <div class="ov-icon">🎯</div>
+      <h3>目的</h3>
+      <p>小学校低学年が楽しく算数を練習できるアプリ。ひらがな表示・選択式・絵ヒントで「わかった！」体験を設計した。</p>
+    </div>
+    <div class="ov-card">
+      <span class="ov-num">02</span>
+      <div class="ov-icon">🏗️</div>
+      <h3>二層構造の設計</h3>
+      <p>子ども（操作者）と保護者（管理者）の二層構造。UIは子ども向けに徹しつつ、保護者ページで学習状況・設定を管理できる。</p>
+    </div>
+    <div class="ov-card">
+      <span class="ov-num">03</span>
+      <div class="ov-icon">⚙️</div>
+      <h3>技術選定</h3>
+      <p>Flutter でクロスプラットフォーム対応。SharedPreferences でローカルデータを永続化。Python でビルドを自動化。</p>
+    </div>
+    <div class="ov-card">
+      <span class="ov-num">04</span>
+      <div class="ov-icon">✅</div>
+      <h3>成果</h3>
+      <p>7モード・2段階ヒント・保護者ページ・間違い履歴管理を実装。コードレビューで品質を高め、実運用レベルに仕上げた。</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- MOCKUP -->
+<section>
+  <div class="two-col">
+    <div class="mockup-phones reveal">
+      <div class="phone" style="width:172px">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="p-bar">📐 さんすうアプリ</div>
+          <div class="p-cards">
+            <div class="p-card" style="background:#DBEAFE">➕ たしざん (しき)</div>
+            <div class="p-card" style="background:#D1FAE5;animation-delay:.3s">➖ ひきざん (しき)</div>
+            <div class="p-card" style="background:#EDE9FE;animation-delay:.6s">✖ かけざん (しき)</div>
+            <div class="p-card" style="background:#CCFBF1;animation-delay:.9s">➗ わりざん (しき)</div>
+            <div class="p-card" style="background:#FED7AA;animation-delay:1.2s">📖 ぶんしょう</div>
+            <div class="p-card" style="background:#FEF08A;animation-delay:1.5s">🧩 パズル</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone" style="width:172px;transform:translateY(36px)">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:#F0F4F8">
+          <div class="pp-bar">👨‍👩‍👧 ほごしゃ</div>
+          <div class="pp-body">
+            <div class="pp-row">📊 せいかいりつ<div class="pp-bar-chart" style="background:#4ADE80;width:75%"></div></div>
+            <div class="pp-row">📋 まちがい: 8もん</div>
+            <div class="pp-row" style="font-size:.43rem;color:#B91C1C;background:#FEF2F2">🔴 3回以上: わりざん</div>
+            <div class="pp-row">👁️ メニューの ひょうじ</div>
+            <div class="pp-row">⚙️ むずかしさ せってい</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-side reveal">
+      <p class="s-label">UI Design</p>
+      <h2>2つの画面、<br>2人のユーザー</h2>
+      <div class="bullet"><div class="bullet-dot"></div><p>子ども画面はひらがなのみ・大きなタップターゲット・選択式で直感操作</p></div>
+      <div class="bullet"><div class="bullet-dot"></div><p>保護者ページは演算別の正解率グラフ・間違い履歴・メニュー表示制御・難易度設定を一元管理</p></div>
+      <div class="bullet"><div class="bullet-dot"></div><p>間違い履歴は永続保存。3回以上間違えた問題は🔴で強調、確認済みにして整理できる</p></div>
+      <div class="bullet"><div class="bullet-dot"></div><p>メニューの表示/非表示を保護者が制御。学習段階に合わせてカスタマイズ可能</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROCESS -->
+<section id="process">
+  <p class="s-label reveal">Development Journey</p>
+  <h2 class="s-title reveal">開発の流れ</h2>
+
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <div class="tl-dot">📐</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 01 — 初期実装</p>
+        <h3>7モードの基本実装</h3>
+        <p>たし・ひき・かけ・わり算・文章問題・パズル・にがてこくふくを実装。SharedPreferences で設定と苦手リストを永続化。ひらがな統一でUI構築。</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🔍</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 02 — コードレビュー</p>
+        <h3>7つの問題を発見・修正</h3>
+        <p>メモリリーク・重複バグ・0除算・setState内非同期・かけ算ハイライト誤りなどを自己レビューで発見。enum化・定数化でコード品質を向上。</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">👨‍👩‍👧</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 03 — 保護者ページ</p>
+        <h3>二層UIの設計と実装</h3>
+        <p>StatsManager クラスで演算別正解率を蓄積。設定・グラフ・苦手一覧・メニュー表示制御を統合した保護者管理画面を新設。</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">💡</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 04 — UX改善</p>
+        <h3>ヒント2段階化・操作性向上</h3>
+        <p>ヒントをテキスト→絵の2段階に。パズルにルール説明カード追加。手入力モードに「こたえあわせ！」ボタン。絵文字上限で表示崩れを防止。</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🎊</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 05 — リザルト画面</p>
+        <h3>達成感を演出するゴール体験</h3>
+        <p>正解数・不正解数・正解率を表示するリザルト画面を実装。100%→🥇など正解率に応じたメダルとコメントでモチベーションを維持。</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">📋</div>
+      <div class="tl-content">
+        <p class="tl-phase">Phase 06 — 履歴管理</p>
+        <h3>消えない間違い履歴システム</h3>
+        <p>HistoryManager クラスで問題ごとの間違い回数を永続記録。3回以上は🔴でハイライト。別画面で一覧表示し、確認済みフラグで整理できる設計。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CODE REVIEW -->
+<section id="review">
+  <div class="review-bg">
+    <p class="s-label">Code Review</p>
+    <h2 class="s-title">発見・修正した問題 <span style="color:var(--orange)">× 7</span></h2>
+    <div class="fixes-grid">
+      <div class="fix-card">
+        <span class="fix-badge badge-bug">Bug</span>
+        <h4>① メモリリーク</h4>
+        <p>TextEditingController を dispose していなかった。</p>
+        <div class="code"><span class="g">@override</span>
+<span class="g">void</span> dispose() {
+  _nameCtrl.<span class="o">dispose</span>();
+  _ansCtrl.<span class="o">dispose</span>();
+  <span class="g">super</span>.<span class="o">dispose</span>();
+}</div>
+      </div>
+      <div class="fix-card">
+        <span class="fix-badge badge-bug">Bug</span>
+        <h4>② 苦手リスト重複</h4>
+        <p>同じ問題を間違えるたびに重複してリストに追加されていた。</p>
+        <div class="code"><span class="m">// 追加前に重複チェック</span>
+<span class="g">final</span> exists = list.<span class="o">any</span>((q) =>
+  q[<span class="o">'m'</span>]==curM.name &&
+  q[<span class="o">'n1'</span>]==n1);
+<span class="g">if</span> (!exists) list.<span class="o">add</span>({...});</div>
+      </div>
+      <div class="fix-card">
+        <span class="fix-badge badge-bug">Bug</span>
+        <h4>③ パズル 0除算</h4>
+        <p>slots[1]==0 のとき -1 を返し誤正解になるバグ。</p>
+        <div class="code"><span class="g">if</span> (slots[1] == 0) {
+  setState(() => slots =
+    List.<span class="o">filled</span>(2,<span class="g">null</span>));
+  <span class="g">return</span>; <span class="m">// 自動リセット</span>
+}</div>
+      </div>
+      <div class="fix-card">
+        <span class="fix-badge badge-ref">Refactor</span>
+        <h4>④ enum でモード管理</h4>
+        <p>文字列比較をタイプセーフな enum に置き換え。</p>
+        <div class="code"><span class="g">enum</span> MathMode {
+  plus, minus, multi, div...
+
+  <span class="g">bool get</span> isPlus =>
+    <span class="g">this</span>==plus ||
+    <span class="g">this</span>==storyPlus;
+}</div>
+      </div>
+      <div class="fix-card">
+        <span class="fix-badge badge-bug">Bug</span>
+        <h4>⑤ かけ算表ハイライト</h4>
+        <p>OR条件で行・列が両方光っていた。AND条件で修正。</p>
+        <div class="code"><span class="m">// 修正前（OR）</span>
+<span class="g">final</span> a=(r==n1||c==n2);
+
+<span class="m">// 修正後（AND）</span>
+<span class="g">final</span> a=(r==n1&&c==n2);</div>
+      </div>
+      <div class="fix-card">
+        <span class="fix-badge badge-ux">UX</span>
+        <h4>⑥⑦ mounted チェック</h4>
+        <p>setState 内処理を整理し mounted チェックを追加してクラッシュを防止。</p>
+        <div class="code">setState(()=>wList=parsed);
+<span class="g">if</span>(!<span class="o">mounted</span>)<span class="g">return</span>;
+<span class="g">if</span>(wList.isEmpty){
+  Navigator.<span class="o">pop</span>(context);
+}<span class="g">else</span>{<span class="o">_gen</span>();}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" style="margin-top:80px">
+
+<!-- FEATURES -->
+<section id="features">
+  <p class="s-label reveal">Features</p>
+  <h2 class="s-title reveal">実装した主な機能</h2>
+  <div class="features-grid reveal">
+    <div class="feat-card"><span class="feat-num">01</span><div class="feat-icon">➕➖✖➗</div><h3>7つの学習モード</h3><p>4演算・文章問題・パズル・にがてこくふく。文章問題はキャラとアイテムをランダム生成。</p></div>
+    <div class="feat-card"><span class="feat-num">02</span><div class="feat-icon">💡</div><h3>2段階ヒントシステム</h3><p>①テキストで方向性、②絵（emoji）で視覚的に解法を表示。演算ごとに最適な見せ方。</p></div>
+    <div class="feat-card"><span class="feat-num">03</span><div class="feat-icon">📊</div><h3>保護者ページ</h3><p>演算別の正解率グラフ（緑/橙/赤で色分け）、メニュー表示制御、難易度・問題数の設定。</p></div>
+    <div class="feat-card"><span class="feat-num">04</span><div class="feat-icon">📋</div><h3>間違い履歴管理</h3><p>HistoryManager で間違い回数を永続記録。3回以上は🔴ハイライト、確認済みで整理できる。</p></div>
+    <div class="feat-card"><span class="feat-num">05</span><div class="feat-icon">🎊</div><h3>リザルト画面</h3><p>正解率に応じて🥇〜⭐のメダルとコメントが変化し、達成感を演出するゴール体験。</p></div>
+    <div class="feat-card"><span class="feat-num">06</span><div class="feat-icon">🧩</div><h3>パズルモード</h3><p>□に数を当てるパズル。たし・ひき・3つ・混合の4レベル。毎回ルール説明カードを表示。</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STACK -->
+<section id="stack">
+  <p class="s-label reveal">Tech Stack</p>
+  <h2 class="s-title reveal">使用技術</h2>
+  <div class="stack-grid reveal">
+    <div class="stack-card"><div class="stack-icon">🐦</div><h3>Flutter</h3><p>クロスプラットフォームUI。Material Design 3 使用。</p></div>
+    <div class="stack-card"><div class="stack-icon">🎯</div><h3>Dart</h3><p>enum・非同期処理・StatefulWidget で堅牢な状態管理。</p></div>
+    <div class="stack-card"><div class="stack-icon">🐍</div><h3>Python</h3><p>ビルドを自動化するスクリプト。</p></div>
+    <div class="stack-card"><div class="stack-icon">💾</div><h3>SharedPreferences</h3><p>設定・苦手リスト・履歴のローカル永続化。</p></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">さんすう<span>APP</span></div>
+    <p>Flutter Portfolio Project · 2025</p>
+  </div>
+  <a href="https://github.com/" class="github-btn" target="_blank">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+    </svg>
+    GitHub でコードを見る
+  </a>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((el, i) => {
+      if (el.isIntersecting) {
+        setTimeout(() => el.target.classList.add('visible'), (el.target.dataset.i||0)*80);
+        obs.unobserve(el.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el,i) => { el.dataset.i=i%4; obs.observe(el); });
+</script>
+</body>
+</html>
